@@ -216,6 +216,95 @@ const App = () => {
 export default App
 ```
 
+**变更合并**
+
+以下情况只触发一次render并且最终 count === 3
+
+```jsx
+import { useSignal, createSignal, initSingalManager } from 'react-use-signal';
+
+const App = () => {
+ createSignal('app', { count: 0 });
+ const [state, setState] = useSignal('app');
+ 
+ // 点击以后发现只有 <Child /> 组件更新了
+ // 实际上 <ChildNormal /> 与 <Child /> 依赖同一个Signal
+ const onAdd = () => {
+  setState({ count: state.count + 1 });
+  setState({ count: state.count + 2 });
+  setState({ count: state.count + 3 });
+ };
+
+ return (
+  <div>
+   <div onClick={onAdd}>Click to chang count!</div>
+   <div>count: { state.count }</div>
+  </div>
+ );
+};
+
+export default App;
+```
+
+以下情况将会触发两次render
+
+```jsx
+import { useSignal, createSignal, initSingalManager } from 'react-use-signal';
+
+const App = () => {
+ createSignal('app', { count: 0 });
+ const [state, setState] = useSignal('app');
+ 
+ // 点击以后发现只有 <Child /> 组件更新了
+ // 实际上 <ChildNormal /> 与 <Child /> 依赖同一个Signal
+ const onAdd = () => {
+  setState({ count: state.count + 1 });
+  setTimeout(() => {
+   // 此时count === 1
+   setState({ count: state.count + 2 })
+  });
+ };
+
+ return (
+  <div>
+   <div onClick={onAdd}>Click to chang count!</div>
+   <div>count: { state.count }</div>
+  </div>
+ );
+};
+
+export default App;
+```
+
+获取变更结果
+
+```jsx
+import { useSignal, createSignal, initSingalManager } from 'react-use-signal';
+
+const App = () => {
+ createSignal('app', { count: 0 });
+ const [state, setState] = useSignal('app');
+ 
+ // 点击以后发现只有 <Child /> 组件更新了
+ // 实际上 <ChildNormal /> 与 <Child /> 依赖同一个Signal
+ const onAdd = () => {
+  setState({ count: state.count + 1 }).then((state) => {
+    console.log(state.count); // 1
+  });
+  console.log(state.count); // 0
+ };
+
+ return (
+  <div>
+   <div onClick={onAdd}>Click to chang count!</div>
+   <div>count: { state.count }</div>
+  </div>
+ );
+};
+
+export default App;
+```
+
 **高级使用**
 
 🚫注意：如果前面的使用已经可以满足你的需求，就不建议你使用以下的能力，因为这可能会给你的程序带来不可控的因素，所以一切尝试都建立在你足够了解use-signal!
