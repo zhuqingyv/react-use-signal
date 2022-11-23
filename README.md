@@ -131,6 +131,20 @@ export default App
 
 **深度订阅模式**
 
+有两个场景可使用深度订阅优化性能：
+
+1、当某一个组件依赖列表中的某一项
+
+2、单独更新数组中的某一项
+
+深度订阅特权：
+
+1、set方法不再局限于引用类型，可以是任意类型，相应的值会根据路径改变信号源状态
+
+2、更新范围是可以穿透树形结构进行的，也就是局部刷新
+
+以下为基本深度订阅模式
+
 ```jsx
 import { useSignal, createSignal, initSingalManager } from 'react-use-signal';
 
@@ -164,6 +178,46 @@ const App = () => {
    <div onClick={onAdd}>Click to chang count!</div>
    <Child />
    <ChildNormal />
+  </div>
+ );
+};
+
+export default App
+```
+
+数组深度订阅
+
+Item内部点击事件，只会更新当前点击的Item，并不会刷新整个List
+
+并且setId可以传递任意类型
+
+```jsx
+import { useSignal, createSignal, initSingalManager } from 'react-use-signal';
+
+const Item = ({index}) => {
+ const [id, setId] = useSignal('app', `list.${index}`);
+ return (
+  <div onClick={() => setId(123)}>id: { id }</div>
+ );
+};
+
+const List = ({list}) => {
+ return list.map((item, i) => <Item key={item} index={i} />);
+};
+
+const App = () => {
+ createSignal('app', { list: Array.from({length: 10}).map((item, i) => i)  });
+ 
+ // 点击以后发现只有 <Child /> 组件更新了
+ // 实际上 <ChildNormal /> 与 <Child /> 依赖同一个Signal
+ const onAdd = () => {
+  setState({ count: state.count + 1 });
+ };
+
+ return (
+  <div>
+   <div onClick={onAdd}>Click to chang count!</div>
+   <List list={state.list} />
   </div>
  );
 };

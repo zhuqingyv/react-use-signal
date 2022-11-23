@@ -94,6 +94,8 @@ export default class Signal {
 
   // memo deep register
   _deepRegister = new Map();
+  _willUpdateDeepRegisterList = new Set();
+  _willUpdateDeepRegisterUpdater = null;
 
   constructor({ state, name, manager, key, autoDestroy }) {
     this.state = state;
@@ -130,9 +132,13 @@ export default class Signal {
       }
 
       // const [storeState, setStoreState] = useSignal('app', 'data.visible');
+      // setStateDeep
       if (!isEmptyString(props)) {
         const newValue = getData(this.state, propsString);
-        return [newValue, this.setState, updater, this];
+        return [newValue, (value) => {
+          this.setStateDeep(propsString, value, [propsString]);
+          return this.updateDeepRegister();
+        }, updater, this];
       };
     };
 
@@ -140,7 +146,10 @@ export default class Signal {
     if (length === 2) {
       const computed = _arguments[1];
       const newValue = computed(getData(this.state, propsString));
-      return [newValue, this.setState, updater, this];
+      return [newValue, (value) => {
+        this.setStateDeep(propsString, value, [propsString]);
+        return this.updateDeepRegister();
+      }, updater, this];
     };
 
     return [this.state, this.setState, updater, this];
@@ -267,19 +276,40 @@ export default class Signal {
     _currentChangeLoop.set(updater, true);
   };
 
-  // 深度订阅,立即更新
+  // 深度订阅记录变更
   setStateDeep = (propsKey, value, dispatchList = []) => {
     return new Promise(async(resolve, reject) => {
       // set state data
       const setResult = await setData(this.state, propsKey, value).catch((error) => error).then(() => this.state);
       if (setResult !== this.state) reject(setResult);
       try {
-        dispatchList.forEach((key) => {
-          // 查找每一项深度订阅
-          const deepRegisterList = this._deepRegister.get(key);
-          if (deepRegisterList?.size) Array.from(deepRegisterList.keys()).forEach((updater) => updater(Object.create(null)))
+        dispatchList.forEach((item) => {
+          this._willUpdateDeepRegisterList.add(item)
         });
-        resolve();
+        resolve(this.state);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  // 深度订阅触发更新
+  updateDeepRegister = () => {
+    if (this._willUpdateDeepRegisterUpdater) return _willUpdateDeepRegisterUpdater;
+
+    this._willUpdateDeepRegisterUpdater = new Promise((resolve, reject) => {
+      try {
+        queueMicrotask(() => {
+          const { _willUpdateDeepRegisterList = [] } = this;
+          _willUpdateDeepRegisterList.forEach((key) => {
+            // 查找每一项深度订阅
+            const deepRegisterList = this._deepRegister.get(key);
+            if (deepRegisterList?.size) Array.from(deepRegisterList.keys()).forEach((updater) => updater(Object.create(null)));
+          });
+          resolve(this.state);
+          this._willUpdateDeepRegisterUpdater = null;
+          this._willUpdateDeepRegisterList.clear();
+        });
       } catch (error) {
         reject(error);
       }
