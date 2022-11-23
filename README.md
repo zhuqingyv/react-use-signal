@@ -2,7 +2,7 @@
 
 [GitHub - zhuqingyv/react-use-signal: 这可能是最简单的react状态共享库](https://github.com/zhuqingyv/react-use-signal)
 
-![sharpicons_signal-2.svg](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3604a052-f381-478d-97b7-fbe55fb2528c/sharpicons_signal-2.svg)
+![image](https://github.com/zhuqingyv/react-use-signal/blob/main/icon.svg)
 
 # **Des**
 
