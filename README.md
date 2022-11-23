@@ -1,7 +1,5 @@
 ### react-use-signal
 
-[GitHub - zhuqingyv/react-use-signal: 这可能是最简单的react状态共享库](https://github.com/zhuqingyv/react-use-signal)
-
 ![image](https://github.com/zhuqingyv/react-use-signal/blob/main/icon.svg)
 
 # **Des**
