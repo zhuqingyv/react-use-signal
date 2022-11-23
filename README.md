@@ -36,7 +36,7 @@ const App = () => {
 export default App
 ```
 
-**函数函数式初始化一个Signal**
+**函数式初始化一个Signal**
 
 ```jsx
 import { useSignal, createSignal, initSingalManager } from 'react-use-signal';
