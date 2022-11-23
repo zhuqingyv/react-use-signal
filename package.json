@@ -1,0 +1,32 @@
+{
+  "name": "react-use-signal",
+  "version": "1.0.0",
+  "description": "这可能是最小的React状态管理库",
+  "main": "./use-signal/index.js",
+  "scripts": {
+    "demo": "cd ./demo && npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhuqingyv/react-use-signal"
+  },
+  "author": "pianoboy",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "webpack-cli": "^4.10.0"
+  },
+  "keywords": [
+    "react",
+    "状态",
+    "state",
+    "use-signal",
+    "hooks",
+    "react-hooks"
+  ],
+  "dependencies": {
+    "react": "^18.2.0",
+    "terser": "^5.15.1"
+  },
+  "files": ["use-signal", "README.md", "LICENSE", "package.json"]
+}
