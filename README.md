@@ -1,4 +1,4 @@
-### react-use-signal
+# react-use-signal
 
 ![image](https://github.com/zhuqingyv/react-use-signal/blob/main/icon.svg)
 
