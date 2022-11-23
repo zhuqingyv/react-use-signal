@@ -226,9 +226,6 @@ import { useSignal, createSignal, initSingalManager } from 'react-use-signal';
 const App = () => {
  createSignal('app', { count: 0 });
  const [state, setState] = useSignal('app');
- 
- // 点击以后发现只有 <Child /> 组件更新了
- // 实际上 <ChildNormal /> 与 <Child /> 依赖同一个Signal
  const onAdd = () => {
   setState({ count: state.count + 1 });
   setState({ count: state.count + 2 });
@@ -254,9 +251,6 @@ import { useSignal, createSignal, initSingalManager } from 'react-use-signal';
 const App = () => {
  createSignal('app', { count: 0 });
  const [state, setState] = useSignal('app');
- 
- // 点击以后发现只有 <Child /> 组件更新了
- // 实际上 <ChildNormal /> 与 <Child /> 依赖同一个Signal
  const onAdd = () => {
   setState({ count: state.count + 1 });
   setTimeout(() => {
@@ -285,8 +279,6 @@ const App = () => {
  createSignal('app', { count: 0 });
  const [state, setState] = useSignal('app');
  
- // 点击以后发现只有 <Child /> 组件更新了
- // 实际上 <ChildNormal /> 与 <Child /> 依赖同一个Signal
  const onAdd = () => {
   setState({ count: state.count + 1 }).then((state) => {
     console.log(state.count); // 1
