@@ -17,7 +17,7 @@
 
 # BenchMark
 
-![image](https://github.com/zhuqingyv/react-use-signal/blob/main/benchmark.png)  
+<img src="https://github.com/zhuqingyv/react-use-signal/blob/main/benchmark.png" width="500" />  
 
 # Use
 
