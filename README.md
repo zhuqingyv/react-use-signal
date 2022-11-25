@@ -17,6 +17,8 @@
 
 # BenchMark
 
+🚫声明：目前是跑最基本的React渲染,并未做任何性能优化,benchmark的结果只能说明use-signal在react之上做了很轻的封装,后面会对局部更新做测试优化  
+
 <img src="https://github.com/zhuqingyv/react-use-signal/blob/main/benchmark.png" width="500" />  
 
 # Use
