@@ -1,6 +1,6 @@
 {
   "name": "react-use-signal",
-  "version": "1.0.6-beta",
+  "version": "1.0.7-beta",
   "description": "这可能是最小的React状态管理库",
   "main": "./use-signal/index.js",
   "scripts": {

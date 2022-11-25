@@ -52,7 +52,7 @@ export const setData = (props, key, value) => {
         return current[propsKey];
       }, props);
   
-      resolve(true);
+      resolve(props);
     } catch (error) {
       reject(error);
     };
@@ -280,8 +280,7 @@ export default class Signal {
   setStateDeep = (propsKey, value, dispatchList = []) => {
     return new Promise(async(resolve, reject) => {
       // set state data
-      const setResult = setData(this.state, propsKey, value).catch((error) => error).then(() => this.state);
-      if (setResult !== this.state) reject(setResult);
+      setData(this.state, propsKey, value).catch((error) => error).then(() => this.state).catch((error) => reject(error));
       try {
         dispatchList.forEach((item) => {
           this._willUpdateDeepRegisterList.add(item)
