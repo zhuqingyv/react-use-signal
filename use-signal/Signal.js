@@ -135,7 +135,7 @@ export default class Signal {
       // setStateDeep
       if (!isEmptyString(props)) {
         const newValue = getData(this.state, propsString);
-        return [newValue, (value) => {
+        return [newValue, async(value) => {
           this.setStateDeep(propsString, value, [propsString]);
           return this.updateDeepRegister();
         }, updater, this];
@@ -146,7 +146,7 @@ export default class Signal {
     if (length === 2) {
       const computed = _arguments[1];
       const newValue = computed(getData(this.state, propsString));
-      return [newValue, (value) => {
+      return [newValue, async(value) => {
         this.setStateDeep(propsString, value, [propsString]);
         return this.updateDeepRegister();
       }, updater, this];
@@ -280,7 +280,7 @@ export default class Signal {
   setStateDeep = (propsKey, value, dispatchList = []) => {
     return new Promise(async(resolve, reject) => {
       // set state data
-      const setResult = await setData(this.state, propsKey, value).catch((error) => error).then(() => this.state);
+      const setResult = setData(this.state, propsKey, value).catch((error) => error).then(() => this.state);
       if (setResult !== this.state) reject(setResult);
       try {
         dispatchList.forEach((item) => {
@@ -295,7 +295,7 @@ export default class Signal {
 
   // 深度订阅触发更新
   updateDeepRegister = () => {
-    if (this._willUpdateDeepRegisterUpdater) return _willUpdateDeepRegisterUpdater;
+    if (this._willUpdateDeepRegisterUpdater) return this._willUpdateDeepRegisterUpdater;
 
     this._willUpdateDeepRegisterUpdater = new Promise((resolve, reject) => {
       try {
@@ -309,6 +309,7 @@ export default class Signal {
           resolve(this.state);
           this._willUpdateDeepRegisterUpdater = null;
           this._willUpdateDeepRegisterList.clear();
+          this._currentChangeLoop.clear();
         });
       } catch (error) {
         reject(error);
