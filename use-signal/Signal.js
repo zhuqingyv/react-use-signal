@@ -250,7 +250,7 @@ export default class Signal {
 
     if (this._updater) return this.updater;
 
-    this._updater = new Promise((resolve, reject) => {
+    return this._updater = new Promise((resolve, reject) => {
       try {
         queueMicrotask(() => {
           // merge change
