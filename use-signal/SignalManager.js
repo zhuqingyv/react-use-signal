@@ -50,12 +50,15 @@ class SignalManager {
 
     // 信号
     const signal = new Signal({
-      state: signalState,
+      state: signalState instanceof Promise ? {} : signalState,
       name: signalName,
       manager: this,
       key,
       autoDestroy
     });
+
+    // 允许state以异步方式加载
+    if (signalState instanceof Promise) signalState.then((state) => signal.setState(state));
 
     // 记录
     this._signal.set(signalName, signal);
