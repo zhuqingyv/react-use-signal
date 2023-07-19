@@ -240,7 +240,7 @@ export default class Signal {
     // memo updating
     this._updateCache = Object.create(null);
     // memo current change
-    this._currentChangeLoop = [];
+    this._currentChangeLoop = new Map();
     this.manager = null;
   };
 
