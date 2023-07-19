@@ -171,22 +171,22 @@ export default class Signal {
       });
 
       this.setDeepRegister(propsString, updater);
-      this.autoDisRegiste(updater);
+      this.autoDisRegister(updater);
       return this.subscribers.get(updater);
     };
 
-    this.autoDisRegiste(updater);
+    this.autoDisRegister(updater);
     this.setCurrentChangeLoop(updater);
     return history;
   };
 
-  // unMounted disregiste
-  autoDisRegiste = (updater) => {
+  // unMounted disRegister
+  autoDisRegister = (updater) => {
     useEffect(() => {
       return () => {
-        const { propsString } = this.subscribers.get(updater);
+        const subscriber = this.subscribers.get(updater);
         this.subscribers.delete(updater);
-        this._deepRegister.delete(propsString);
+        this._deepRegister.delete(subscriber?.propsString);
         this._currentChangeLoop.delete(updater);
         return true;
       };
