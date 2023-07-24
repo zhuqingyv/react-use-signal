@@ -248,7 +248,7 @@ export default class Signal {
   setState = (objectUpdate = Object.create(null)) => {
     Object.assign(this._updateCache, objectUpdate);
 
-    if (this._updater) return this.updater;
+    if (this._updater) return this._updater;
 
     return this._updater = new Promise((resolve, reject) => {
       try {
